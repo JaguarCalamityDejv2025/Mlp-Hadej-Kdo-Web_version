@@ -19,13 +19,14 @@
             box-sizing: border-box;
         }
         .app-container {
-            max-width: 500px;
+            max-width: 750px; /* Zvětšeno z 550px pro širší hrací plochu */
             width: 100%;
             background-color: #fff8eb;
             border: 2px solid #ffcc66;
             border-radius: 16px;
-            padding: 20px;
+            padding: 35px;     /* Zvětšeno vnitřní odsazení */
             box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+            box-sizing: border-box;
         }
         h1 {
             font-size: 24px;
@@ -40,7 +41,7 @@
         }
         .display-box {
             width: 100%;
-            height: 280px;
+            height: 320px; /* Zvětšena výška pro pohodlnější zobrazení mřížky */
             border: 2px solid #ffd280;
             border-radius: 12px;
             margin-bottom: 20px;
@@ -49,30 +50,51 @@
             align-items: center;
             justify-content: center;
             box-sizing: border-box;
-            padding: 10px;
+            padding: 15px;
             background-color: #ffffff;
+            overflow-y: auto;
         }
-        .display-box img {
+        /* Mřížka zbývajících poníků během hry */
+        .grid-ponies {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(55px, 1fr));
+            gap: 8px;
+            width: 100%;
+            max-height: 100%;
+            align-content: start;
+        }
+        .mini-pony {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background: #fff3db;
+            border-radius: 6px;
+            padding: 4px;
+            font-size: 10px;
+            text-align: center;
+        }
+        .mini-pony img {
+            width: 45px;
+            height: 45px;
+            object-fit: contain;
+        }
+        .display-box img.winner-img {
             max-width: 100%;
             max-height: 200px;
             object-fit: contain;
-        }
-        .display-box p {
-            font-size: 20px;
-            font-weight: bold;
-            margin-top: 10px;
-            color: #333;
         }
         .buttons-container {
             display: flex;
             flex-direction: column;
             gap: 10px;
+            max-height: 240px;
+            overflow-y: auto;
         }
         .btn-option {
             background-color: #3b82f6;
             border: none;
             color: #ffffff;
-            padding: 14px;
+            padding: 12px;
             font-size: 16px;
             font-weight: bold;
             border-radius: 8px;
@@ -86,7 +108,7 @@
             transform: scale(0.98);
         }
         .btn-reset {
-            background-color: #3b82f6;
+            background-color: #3b82f6; /* Změněno z červené na modrou */
             color: white;
             border: none;
             padding: 12px 20px;
@@ -99,18 +121,18 @@
             transition: background-color 0.2s;
         }
         .btn-reset:hover {
-            background-color: #2563eb;
+            background-color: #2563eb; /* Odpovídající hover efekt pro modrou */
         }
     </style>
 </head>
 <body>
 
     <div class="app-container">
-        <h1>Vítej ve hře MLP Hádej kdo (Web verze)</h1>
+        <h1>Vítej ve hře MLP Hádej kdo</h1>
         
         <!-- ÚVODNÍ OKNO -->
         <div id="startScreen">
-            <div class="display-box" style="justify-content: center; text-align: center; padding: 20px;">
+            <div class="display-box" style="justify-content: center; text-align: center;">
                 <p style="font-size: 22px; margin-bottom: 10px;">Vítej ve hře!</p>
                 <p style="font-size: 16px; font-weight: normal; color: #555;">Mysli si postavu a stiskni tlačítko Start Hry.</p>
             </div>
@@ -119,7 +141,7 @@
             </div>
         </div>
 
-        <!-- HERNÍ OKNO (ze začátku skryté) -->
+        <!-- HERNÍ OKNO -->
         <div id="gameScreen" style="display: none;">
             <div id="questionText" class="question-text">1. Je tvá postava z G4 nebo G5?</div>
             <div class="display-box" id="displayBox"></div>
@@ -164,147 +186,20 @@
             { Jmeno: "Derpy Hooves", Generace: "G4", Pohlavi: "Žena", Druh: "Pegas", BarvaOci: "Žlutá", BarvaSrsti: "Světle šedá", SekundarniSrsti: "Ne", SekundarniBarvaSrsti: "", BarvaHrivy: "Světle žlutá", SekundarniHrivy: "Ne", SekundarniBarvaHrivy: "", ObrazekCesta: "obrázky/Derpy_Hooves.png" },
             { Jmeno: "Octavia Melody", Generace: "G4", Pohlavi: "Žena", Druh: "Pozemský poník", BarvaOci: "Fialová", BarvaSrsti: "Šedá", SekundarniSrsti: "Ne", SekundarniBarvaSrsti: "", BarvaHrivy: "Tmavá šedá", SekundarniHrivy: "Ne", SekundarniBarvaHrivy: "", ObrazekCesta: "obrázky/Octavia_Melody.png" },
             { Jmeno: "Vinyl Scratch", Generace: "G4", Pohlavi: "Žena", Druh: "Jednorožec", BarvaOci: "Tmavě fialová", BarvaSrsti: "Bílá", SekundarniSrsti: "Ne", SekundarniBarvaSrsti: "", BarvaHrivy: "Modrá", SekundarniHrivy: "Ano", SekundarniBarvaHrivy: "Světle modrá", ObrazekCesta: "obrázky/Vinyl_Scratch.png" },
-            { Jmeno: "Trixie Lulamoon", Generace: "G4", Pohlavi: "Žena", Druh: "Jednorožec", BarvaOci: "Fialová", BarvaSrsti: "Tmavě modrá", SekundarniSrsti: "Ne", SekundarniBarvaSrsti: "", BarvaHrivy: "Světle modrá", SekundarniHrivy: "Ano", SekundarniBarvaHrivy: "Velmi světle modrá", ObrazekCesta: "obrázky/Trixie_Lulamoon.png" },
-                  ];
+            { Jmeno: "Trixie Lulamoon", Generace: "G4", Pohlavi: "Žena", Druh: "Jednorožec", BarvaOci: "Fialová", BarvaSrsti: "Tmavě modrá", SekundarniSrsti: "Ne", SekundarniBarvaSrsti: "", BarvaHrivy: "Světle modrá", SekundarniHrivy: "Ano", SekundarniBarvaHrivy: "Velmi světle modrá", ObrazekCesta: "obrázky/Trixie_Lulamoon.png" }
+        ];
         
         const kroky = [
-            {
-                otazka: "1. Je tvá postava z G4 nebo G5?",
-                klic: "Generace",
-                moznosti: [
-                    { text: "G4", hodnota: "G4" },
-                    { text: "G5", hodnota: "G5" }
-                ]
-            },
-            {
-                otazka: "2. Jaké pohlaví je tvoje postava?",
-                klic: "Pohlavi",
-                moznosti: [
-                    { text: "Muž", hodnota: "Muž" },
-                    { text: "Žena", hodnota: "Žena" }
-                ]
-            },
-            {
-                otazka: "3. Jaký druh je tvoje postava?",
-                klic: "Druh",
-                moznosti: [
-                    { text: "Pozemský poník", hodnota: "Pozemský poník" },
-                    { text: "Jednorožec", hodnota: "Jednorožec" },
-                    { text: "Pegas", hodnota: "Pegas" },
-                    { text: "Alicorn", hodnota: "Alicorn" },
-                    { text: "Drak", hodnota: "Drak" },
-                    { text: "Changeling", hodnota: "Changeling" }
-                ]
-            },
-            {
-                otazka: "4. Jakou barvu očí má tvá postava?",
-                klic: "BarvaOci",
-                moznosti: [
-                    { text: "Zelená", hodnota: "Zelená" },
-                    { text: "Modrá", hodnota: "Modrá" },
-                    { text: "Modro-fialová", hodnota: "Modro-fialová" },
-                    { text: "Fialová", hodnota: "Fialová" },
-                    { text: "Tmavě fialová", hodnota: "Tmavě fialová" },
-                    { text: "Purpurová", hodnota: "Purpurová" },
-                    { text: "Tmavě modrá", hodnota: "Tmavě modrá" },
-                    { text: "Červená", hodnota: "Červená" },
-                    { text: "Žlutá", hodnota: "Žlutá" },
-                    { text: "Tyrkysová", hodnota: "Tyrkysová" },
-                    { text: "Hnědá", hodnota: "Hnědá" },
-                    { text: "Tmavě zelená", hodnota: "Tmavě zelená" },
-                    { text: "Oranžová", hodnota: "Oranžová" }
-                ]
-            },
-            {
-                otazka: "5. Jakou barvu srsti (či kůže) má tvá postava?",
-                klic: "BarvaSrsti",
-                moznosti: [
-                    { text: "Světle fialová", hodnota: "Světle fialová" },
-                    { text: "Fialová", hodnota: "Fialová" },
-                    { text: "Světle růžová", hodnota: "Světle růžová" },
-                    { text: "Růžová", hodnota: "Růžová" },
-                    { text: "Světle modrá", hodnota: "Světle modrá" },
-                    { text: "Tmavě modrá", hodnota: "Tmavě modrá" },
-                    { text: "Žlutá", hodnota: "Žlutá" },
-                    { text: "Světle žlutá", hodnota: "Světle žlutá" },
-                    { text: "Oranžová", hodnota: "Oranžová" },
-                    { text: "Bílá", hodnota: "Bílá" },
-                    { text: "Červená", hodnota: "Červená" },
-                    { text: "Černá", hodnota: "Černá" },
-                    { text: "Šedá", hodnota: "Šedá" },
-                    { text: "Tmavě šedá", hodnota: "Tmavě šedá" },
-                    { text: "Světle tyrkysová", hodnota: "Světle tyrkysová" },
-                    { text: "Světle zelená", hodnota: "Světle zelená" },
-                    { text: "Purpurová", hodnota: "Purpurová" }
-                ]
-            },
-            {
-                otazka: "6. Má tělo / srst vaší postavy ještě nějakou sekundární barvu?",
-                klic: "SekundarniSrsti",
-                moznosti: [
-                    { text: "Ano", hodnota: "Ano" },
-                    { text: "Ne", hodnota: "Ne" }
-                ]
-            },
-            {
-                otazka: "7. Jakou sekundární barvu má srst vaší postavy?",
-                klic: "SekundarniBarvaSrsti",
-                moznosti: [
-                    { text: "Světle zelená", hodnota: "Světle zelená" },
-                    { text: "Bílá", hodnota: "Bílá" },
-                    { text: "Růžová", hodnota: "Růžová" },
-                    { text: "Tmavě zelená", hodnota: "Tmavě zelená" },
-                    { text: "Žádná / Nemá", hodnota: "" }
-                ]
-            },
-            {
-                otazka: "8. Jakou hlavní barvu hřívy (či vlasů) má tvá postava?",
-                klic: "BarvaHrivy",
-                moznosti: [
-                    { text: "Tmavě modrá", hodnota: "Tmavě modrá" },
-                    { text: "Žlutá", hodnota: "Žlutá" },
-                    { text: "Duhová", hodnota: "Duhová" },
-                    { text: "Tmavě růžová", hodnota: "Tmavě růžová" },
-                    { text: "Fialová", hodnota: "Fialová" },
-                    { text: "Růžová", hodnota: "Růžová" },
-                    { text: "Světle zelená", hodnota: "Světle zelená" },
-                    { text: "Modrá", hodnota: "Modrá" },
-                    { text: "Tyrkysová", hodnota: "Tyrkysová" },
-                    { text: "Bílá", hodnota: "Bílá" },
-                    { text: "Oranžová", hodnota: "Oranžová" },
-                    { text: "Purpurová", hodnota: "Purpurová" },
-                    { text: "Černá", hodnota: "Černá" },
-                    { text: "Tmavá šedá", hodnota: "Tmavá šedá" },
-                    { text: "Světle žlutá / Tmavě růžová / Tmavě fialová", hodnota: "Světle žlutá / Tmavě růžová / Tmavě fialová" },
-                    { text: "Modrá / Zelená / Fialová / Růžová", hodnota: "Modrá / Zelená / Fialová / Růžová" }
-                ]
-            },
-            {
-                otazka: "9. Má hříva vaší postavy nějakou sekundární barvu / další barvu?",
-                klic: "SekundarniHrivy",
-                moznosti: [
-                    { text: "Ano", hodnota: "Ano" },
-                    { text: "Ne", hodnota: "Ne" }
-                ]
-            },
-            {
-                otazka: "10. Jakou sekundární barvu hřívy má tvá postava?",
-                klic: "SekundarniBarvaHrivy",
-                moznosti: [
-                    { text: "Fialová", hodnota: "Fialová" },
-                    { text: "Modrá", hodnota: "Modrá" },
-                    { text: "Růžová / Oranžová", hodnota: "Růžová / Oranžová" },
-                    { text: "Světle tyrkysová", hodnota: "Světle tyrkysová" },
-                    { text: "Tmavě modrá / Průhledná", hodnota: "Tmavě modrá / Průhledná" },
-                    { text: "Červená", hodnota: "Červená" },
-                    { text: "Světle růžová", hodnota: "Světle růžová" },
-                    { text: "Světle oranžová", hodnota: "Světle oranžová" },
-                    { text: "Tmavě oranžová", hodnota: "Tmavě oranžová" },
-                    { text: "Světle modrá", hodnota: "Světle modrá" },
-                    { text: "Velmi světle modrá", hodnota: "Velmi světle modrá" },
-                    { text: "Žádná / Nemá", hodnota: "" }
-                ]
-            }
+            { otazka: "1. Je tvá postava z G4 nebo G5?", klic: "Generace", moznosti: [{ text: "G4", hodnota: "G4" }, { text: "G5", hodnota: "G5" }] },
+            { otazka: "2. Jaké pohlaví je tvoje postava?", klic: "Pohlavi", moznosti: [{ text: "Muž", hodnota: "Muž" }, { text: "Žena", hodnota: "Žena" }] },
+            { otazka: "3. Jaký druh je tvoje postava?", klic: "Druh", moznosti: [{ text: "Pozemský poník", hodnota: "Pozemský poník" }, { text: "Jednorožec", hodnota: "Jednorožec" }, { text: "Pegas", hodnota: "Pegas" }, { text: "Alicorn", hodnota: "Alicorn" }, { text: "Drak", hodnota: "Drak" }, { text: "Changeling", hodnota: "Changeling" }] },
+            { otazka: "4. Jakou barvu očí má tvá postava?", klic: "BarvaOci", moznosti: [{ text: "Zelená", hodnota: "Zelená" }, { text: "Modrá", hodnota: "Modrá" }, { text: "Modro-fialová", hodnota: "Modro-fialová" }, { text: "Fialová", hodnota: "Fialová" }, { text: "Tmavě fialová", hodnota: "Tmavě fialová" }, { text: "Purpurová", hodnota: "Purpurová" }, { text: "Tmavě modrá", hodnota: "Tmavě modrá" }, { text: "Červená", hodnota: "Červená" }, { text: "Žlutá", hodnota: "Žlutá" }, { text: "Tyrkysová", hodnota: "Tyrkysová" }, { text: "Hnědá", hodnota: "Hnědá" }, { text: "Tmavě zelená", hodnota: "Tmavě zelená" }, { text: "Oranžová", hodnota: "Oranžová" }] },
+            { otazka: "5. Jakou barvu srsti (či kůže) má tvá postava?", klic: "BarvaSrsti", moznosti: [{ text: "Světle fialová", hodnota: "Světle fialová" }, { text: "Fialová", hodnota: "Fialová" }, { text: "Světle růžová", hodnota: "Světle růžová" }, { text: "Růžová", hodnota: "Růžová" }, { text: "Světle modrá", hodnota: "Světle modrá" }, { text: "Tmavě modrá", hodnota: "Tmavě modrá" }, { text: "Žlutá", hodnota: "Žlutá" }, { text: "Světle žlutá", hodnota: "Světle žlutá" }, { text: "Oranžová", hodnota: "Oranžová" }, { text: "Bílá", hodnota: "Bílá" }, { text: "Červená", hodnota: "Červená" }, { text: "Černá", hodnota: "Černá" }, { text: "Šedá", hodnota: "Šedá" }, { text: "Tmavě šedá", hodnota: "Tmavě šedá" }, { text: "Světle tyrkysová", hodnota: "Světle tyrkysová" }, { text: "Světle zelená", hodnota: "Světle zelená" }, { text: "Purpurová", hodnota: "Purpurová" }] },
+            { otazka: "6. Má tělo / srst vaší postavy ještě nějakou sekundární barvu?", klic: "SekundarniSrsti", moznosti: [{ text: "Ano", hodnota: "Ano" }, { text: "Ne", hodnota: "Ne" }] },
+            { otazka: "7. Jakou sekundární barvu má srst vaší postavy?", klic: "SekundarniBarvaSrsti", moznosti: [{ text: "Světle zelená", hodnota: "Světle zelená" }, { text: "Bílá", hodnota: "Bílá" }, { text: "Růžová", hodnota: "Růžová" }, { text: "Tmavě zelená", hodnota: "Tmavě zelená" }, { text: "Žádná / Nemá", hodnota: "" }] },
+            { otazka: "8. Jakou hlavní barvu hřívy (či vlasů) má tvá postava?", klic: "BarvaHrivy", moznosti: [{ text: "Tmavě modrá", hodnota: "Tmavě modrá" }, { text: "Žlutá", hodnota: "Žlutá" }, { text: "Duhová", hodnota: "Duhová" }, { text: "Tmavě růžová", hodnota: "Tmavě růžová" }, { text: "Fialová", hodnota: "Fialová" }, { text: "Růžová", hodnota: "Růžová" }, { text: "Světle zelená", hodnota: "Světle zelená" }, { text: "Modrá", hodnota: "Modrá" }, { text: "Tyrkysová", hodnota: "Tyrkysová" }, { text: "Bílá", hodnota: "Bílá" }, { text: "Oranžová", hodnota: "Oranžová" }, { text: "Purpurová", hodnota: "Purpurová" }, { text: "Černá", hodnota: "Černá" }, { text: "Tmavá šedá", hodnota: "Tmavá šedá" }, { text: "Světle žlutá / Tmavě růžová / Tmavě fialová", hodnota: "Světle žlutá / Tmavě růžová / Tmavě fialová" }, { text: "Modrá / Zelená / Fialová / Růžová", hodnota: "Modrá / Zelená / Fialová / Růžová" }] },
+            { otazka: "9. Má hříva vaší postavy nějakou sekundární barvu / další barvu?", klic: "SekundarniHrivy", moznosti: [{ text: "Ano", hodnota: "Ano" }, { text: "Ne", hodnota: "Ne" }] },
+            { otazka: "10. Jakou sekundární barvu hřívy má tvá postava?", klic: "SekundarniBarvaHrivy", moznosti: [{ text: "Fialová", hodnota: "Fialová" }, { text: "Modrá", hodnota: "Modrá" }, { text: "Růžová / Oranžová", hodnota: "Růžová / Oranžová" }, { text: "Světle tyrkysová", hodnota: "Světle tyrkysová" }, { text: "Tmavě modrá / Průhledná", hodnota: "Tmavě modrá / Průhledná" }, { text: "Červená", hodnota: "Červená" }, { text: "Světle růžová", hodnota: "Světle růžová" }, { text: "Světle oranžová", hodnota: "Světle oranžová" }, { text: "Tmavě oranžová", hodnota: "Tmavě oranžová" }, { text: "Světle modrá", hodnota: "Světle modrá" }, { text: "Velmi světle modrá", hodnota: "Velmi světle modrá" }, { text: "Žádná / Nemá", hodnota: "" }] }
         ];
 
         let aktualniKrok = 0;
@@ -319,19 +214,47 @@
         function resetHry() {
             aktualniKrok = 0;
             filtrPonici = [...ponici];
-            document.getElementById("displayBox").innerHTML = "";
             document.getElementById("resetBtn").style.display = "none";
             nactiKrok();
         }
 
+        function aktualizujMrizku() {
+            const display = document.getElementById("displayBox");
+            display.innerHTML = "";
+            
+            const grid = document.createElement("div");
+            grid.className = "grid-ponies";
+
+            filtrPonici.forEach(p => {
+                const item = document.createElement("div");
+                item.className = "mini-pony";
+                item.innerHTML = `
+                    <img src="${p.ObrazekCesta}" alt="${p.Jmeno}" title="${p.Jmeno}" onerror="this.src=''">
+                    <span>${p.Jmeno.split(" ")[0]}</span>
+                `;
+                grid.appendChild(item);
+            });
+
+            display.appendChild(grid);
+        }
+
         function nactiKrok() {
-            if (aktualniKrok >= kroky.length || filtrPonici.length <= 1) {
+            if (filtrPonici.length <= 1 || aktualniKrok >= kroky.length) {
                 zobrazVysledek();
                 return;
             }
 
             const krok = kroky[aktualniKrok];
+            const unikatniHodnoty = [...new Set(filtrPonici.map(p => p[krok.klic]))];
+            
+            if (unikatniHodnoty.length <= 1) {
+                aktualniKrok++;
+                nactiKrok();
+                return;
+            }
+
             document.getElementById("questionText").innerText = krok.otazka;
+            aktualizujMrizku();
 
             const btnBox = document.getElementById("buttonsContainer");
             btnBox.innerHTML = "";
@@ -364,15 +287,16 @@
                 const p = filtrPonici[0];
                 document.getElementById("questionText").innerText = "Tvůj poník je:";
                 display.innerHTML = `
-                    <img src="${p.ObrazekCesta}" alt="${p.Jmeno}">
-                    <p>${p.Jmeno}</p>
+                    <img class="winner-img" src="${p.ObrazekCesta}" alt="${p.Jmeno}" onerror="this.style.display='none'">
+                    <p style="font-size:20px; font-weight:bold; margin-top:10px;">${p.Jmeno}</p>
                 `;
             } else if (filtrPonici.length > 1) {
                 document.getElementById("questionText").innerText = "Odpovídá více postavám!";
-                display.innerHTML = `<p>Nalezeno ${filtrPonici.length} možností.</p>`;
+                let jmena = filtrPonici.map(p => p.Jmeno).join(", ");
+                display.innerHTML = `<p style="font-size:16px;">Nalezeno ${filtrPonici.length} možností:<br><span style="font-size:14px; font-weight:normal;">${jmena}</span></p>`;
             } else {
                 document.getElementById("questionText").innerText = "Nikoho jsem nenalezl :-(";
-                display.innerHTML = `<p>Žádná postava neodpovídá této kombinaci.</p>`;
+                display.innerHTML = `<p style="font-size:16px;">Žádná postava neodpovídá této kombinaci.</p>`;
             }
         }
     </script>
